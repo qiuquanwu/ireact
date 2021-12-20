@@ -7,10 +7,19 @@
   "ir":"./ireact.exe"
   },
 ```
-执行
+## 请手动在src下创建components或者views文件夹，否则会报错
+## 生成组件-执行
 ```
-yarn ir -n Hello
+yarn ir -cn Hello
 ```
 运行结果
 
 >在src/components/中生成Hello.js文件
+## 生成页面-执行
+```
+yarn ir -vn Hello
+```
+运行结果
+
+>在src/views/中生成Hello.js文件
+
