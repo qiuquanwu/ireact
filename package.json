@@ -1,0 +1,12 @@
+{
+  "name": "ireact",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "ir":"./ireact.exe"
+  },
+  "bin": {
+    "ireact": "./ireact"
+  },
+  "author": "qiuquanwu"
+}
