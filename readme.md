@@ -4,7 +4,7 @@
 - 编辑package.json
 ```json
  "scripts": {
-  "ir":"./ireact.exe"
+    "ir":"./ireact.exe"
   },
 ```
 ## 请手动在src下创建components或者views文件夹，否则会报错

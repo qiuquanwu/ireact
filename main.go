@@ -37,6 +37,8 @@ func generateView(name string) {
 func main() {
 	fileName := ""
 	isComponent := false
+	task := make(map[string]string)
+	fmt.Printf("task: %v\n", task)
 	for k, v := range os.Args {
 		if v == "-vn" {
 			fileName = os.Args[k+1]
