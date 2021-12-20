@@ -3,11 +3,9 @@
 - 将ireact.exe和templates文件夹复制到项目根目录
 - 编辑package.json
 ```json
-···
  "scripts": {
-+   "ir":"./ireact.exe"
+  "ir":"./ireact.exe"
   },
-···
 ```
 执行
 ```
