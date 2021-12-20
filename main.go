@@ -29,6 +29,7 @@ func generateView(name string) {
 	check(err)
 	dataStr := string(data)
 	res := strings.Replace(dataStr, "${name}", name, -1)
+	// 创建文件夹
 	outName := "./src/views/" + name + ".js"
 	err2 := ioutil.WriteFile(outName, []byte(res), 0666)
 	check(err2)
