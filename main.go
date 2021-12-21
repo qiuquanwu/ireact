@@ -12,49 +12,81 @@ func check(e error) {
 		panic(e)
 	}
 }
+func PathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
+}
 func generateComponent(name string) {
-	originFile := "./templates/component.tpl"
-	data, err := ioutil.ReadFile(originFile)
-	check(err)
-	dataStr := string(data)
-	res := strings.Replace(dataStr, "${name}", name, -1)
+	const originFile string = "./templates/component.tpl"
+	valueMap := make(map[string]string)
+	valueMap["name"] = name
+	res := formartTpl(originFile, valueMap)
 	outName := "./src/components/" + name + ".js"
 	err2 := ioutil.WriteFile(outName, []byte(res), 0666)
 	check(err2)
-	fmt.Printf("生成%v组件成功", name)
+	fmt.Printf("生成%v组件成功\n", name)
 }
 func generateView(name string) {
-	originFile := "./templates/component.tpl"
-	data, err := ioutil.ReadFile(originFile)
+	originFile := "./templates/page.tpl"
+	valueMap := make(map[string]string)
+	valueMap["name"] = name
+	res := formartTpl(originFile, valueMap)
+	// 创建文件夹
+	outDir := "./src/views/" + strings.ToLower(name)
+	exis, err := PathExists(outDir)
+	if !exis {
+		err = os.Mkdir(outDir, 0666)
+		check(err)
+	}
+	//创建组件
+	outName := outDir + "/" + name + ".js"
+	err = ioutil.WriteFile(outName, []byte(res), 0666)
+	check(err)
+	// 创建css
+	outName = outDir + "/index.css"
+	err = ioutil.WriteFile(outName, []byte(""), 0666)
+	check(err)
+	//创建index.js
+	originFile = "./templates/index.tpl"
+	res = formartTpl(originFile, valueMap)
+	outName = outDir + "/index.js"
+	err = ioutil.WriteFile(outName, []byte(res), 0666)
+	check(err)
+	fmt.Printf("生成%v页面成功\n", name)
+
+}
+func formartTpl(path string, valueMap map[string]string) string {
+	data, err := ioutil.ReadFile(path)
 	check(err)
 	dataStr := string(data)
-	res := strings.Replace(dataStr, "${name}", name, -1)
-	// 创建文件夹
-	outName := "./src/views/" + name + ".js"
-	err2 := ioutil.WriteFile(outName, []byte(res), 0666)
-	check(err2)
-	fmt.Printf("生成%v组件成功", name)
+	var res string
+	for key := range valueMap {
+		res = strings.Replace(dataStr, "${"+key+"}", valueMap[key], -1)
+	}
+	return res
 }
 func main() {
-	fileName := ""
-	isComponent := false
-	task := make(map[string]string)
-	fmt.Printf("task: %v\n", task)
+	operator := "-cn"
 	for k, v := range os.Args {
-		if v == "-vn" {
-			fileName = os.Args[k+1]
-			break
+		if k == 0 {
+			continue
 		}
-		if v == "-cn" {
-			fileName = os.Args[k+1]
-			isComponent = true
-			break
+		if find := strings.Contains(v, "-"); find {
+			operator = v
+		} else {
+			if operator == "-cn" {
+				generateComponent(v)
+			} else {
+				generateView(v)
+			}
 		}
-	}
-	if isComponent {
-		generateComponent(fileName)
-	} else {
-		generateView(fileName)
+
 	}
 
 }

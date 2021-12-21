@@ -23,3 +23,15 @@ yarn ir -vn Hello
 
 >在src/views/中生成Hello.js文件
 
+## 生成多个
+```shell
+yarn ir -vn Hello Helloa Hellob -cn Foo
+```
+运行结果
+```shell
+$ go run main.go -vn Hello Helloa Hellob -cn Foo
+生成Hello页面成功
+生成Helloa页面成功
+生成Hellob页面成功
+生成Foo组件成功
+```
